@@ -52,4 +52,16 @@ app.post('/add', async (요청, 응답) => {
         응답.redirect('/list')
     }
 })
+app.get('/join', (요청, 응답) =>{
+    응답.render('join.ejs')
+})
+
+app.post('/in', async (요청, 응답) =>{
+    if (요청.body.name == '') {
+        응답.send('너 누구세요?')
+    } else {
+        await db.collection('user').insertOne({name: 요청.body.name, pw: 요청.body.password})
+        응답.redirect('/list')
+    }
+})
 
