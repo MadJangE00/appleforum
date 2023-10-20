@@ -4,6 +4,9 @@ const app = express()
 app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
 const { MongoClient } = require('mongodb');
 
 let db;
@@ -19,8 +22,8 @@ new MongoClient(url).connect().then((client)=>{
 })
 
 
-app.get('/news', (요청, 응답) => {
-    응답.send('오늘 비옴')
+app.get('/write', (요청, 응답) => {
+    응답.render('write.ejs')
 })
 
 app.get('/shop', (요청, 응답) => {
@@ -40,3 +43,13 @@ const time = new Date()
 app.get('/time', (요청, 응답) => {
     응답.render('time.ejs', {serverTime : time})
 })
+
+app.post('/add', async (요청, 응답) => {
+    if (요청.body.title =='') {
+        응답.send('제목 안 적었는데..')
+    } else {
+        await db.collection('post').insertOne({title: 요청.body.title, content: 요청.body.content})
+        응답.redirect('/list')
+    }
+})
+
