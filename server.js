@@ -7,7 +7,7 @@ app.set('view engine', 'ejs')
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 let db;
 const url = 'mongodb+srv://admin:qwer1234@forum.toudssh.mongodb.net/?retryWrites=true&w=majority';
@@ -26,12 +26,15 @@ app.get('/write', (요청, 응답) => {
     응답.render('write.ejs')
 })
 
-app.get('/shop', (요청, 응답) => {
-    응답.send('쇼핑 페이지임')
-})
-
 app.get('/', (요청, 응답) => {
     응답.sendFile(__dirname + '/index.html')
+})
+
+app.get('/detail/:id', async (요청, 응답) =>{
+    console.log(요청.params)
+    let result = await db.collection('post').findOne({ _id : new ObjectId(요청.params.id) })
+    console.log(result)
+    응답.render('detail.ejs', {result : result})
 })
 
 app.get('/list', async (요청, 응답) => {
