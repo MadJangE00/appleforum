@@ -26,6 +26,11 @@ app.get('/write', (요청, 응답) => {
     응답.render('write.ejs')
 })
 
+app.get('/user', async (요청, 응답) => {
+    let result = await db.collection('user').find().toArray()
+    응답.render('user.ejs', {post : result })
+})
+
 app.get('/', async (요청, 응답) => {
     let result = await db.collection('post').find().toArray()
     응답.render('list.ejs', { post : result })
