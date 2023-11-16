@@ -74,3 +74,7 @@ app.post('/in', async (요청, 응답) =>{
     }
 })
 
+app.get('/notion', (요청, 응답) =>{
+    
+    응답.render('notion.ejs')
+})
